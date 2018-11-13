@@ -18,9 +18,7 @@ class App extends React.Component {
     const id = url[url.length - 1];
 
     axios
-      .get(
-        `http://fectrailblazer-env.ckr33svztx.us-east-1.elasticbeanstalk.com/data/${id}`
-      )
+      .get(`/data/${id}`)
       .then(res => {
         const data = res.data;
         this.setState({
