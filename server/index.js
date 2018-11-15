@@ -36,6 +36,20 @@ app.get("/data/:id", (req, res) => {
   });
 });
 
+// below are additional methods added for sake of stress testing
+
+app.post("/product/:id", (req, res) => {
+  res.status(200).send("post request completed");
+});
+
+app.delete("/product/:id", (req, res) => {
+  res.status(200).send("delete request completed");
+});
+
+app.put("/product/:id", (req, res) => {
+  res.status(200).send("put request completed");
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}...`);
 });
