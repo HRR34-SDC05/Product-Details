@@ -1,22 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs');
 const faker = require('faker');
-
-const stream = fs.createWriteStream('data.csv');
 const csv = require('fast-csv');
-
-const headers = [
-  'id',
-  'name',
-  'rating',
-  'reviewCount',
-  'itemNum',
-  'price',
-  'mainImage',
-  'images',
-];
-
-const csvStream = csv.createWriteStream({ headers });
+// const stream = fs.createWriteStream('./data.csv');
 
 const capitalizeFirst = (str) => {
   let capitalized = str[0].toUpperCase();
@@ -31,15 +17,10 @@ const capitalizeFirst = (str) => {
 };
 
 const randomNum = () => Math.floor(Math.random() * Math.floor(100));
+let numOfImages;
 
 const populateImages = (index) => {
-  const images = [
-    {
-      image: `https://s3-us-west-1.amazonaws.com/hrr34-trailblazer/${index}-min.jpg`,
-      color: capitalizeFirst(faker.commerce.color()),
-    },
-  ];
-  let numOfImages;
+  const images = ['http://placekitten.com/700/500'];
 
   for (let i = 4; i > 0; i -= 1) {
     if (index % i === 0) {
@@ -48,33 +29,93 @@ const populateImages = (index) => {
     }
   }
   for (let i = 1; i <= numOfImages; i++) {
-    images.push({
-      image: `https://s3-us-west-1.amazonaws.com/hrr34-trailblazer/${randomNum()}-min.jpg`,
-      color: capitalizeFirst(faker.commerce.color()),
-    });
+    images.push('http://placekitten.com/700/500');
   }
   return images;
 };
+const populateColors = (index) => {
+  const colors = [capitalizeFirst(faker.commerce.color())];
 
-const generator = async();
-
-const createMockProducts = () => {
-  const products = [];
-  for (let i = 1; i <= 100; i++) {
-    products.push({
-      id: i,
-      name: faker.commerce.productName(),
-      rating: Number(faker.finance.amount(1, 5, 1)),
-      reviewCount: faker.random.number({ min: 20, max: 150 }),
-      itemNum: i,
-      price: faker.commerce.price(50, 500),
-      mainImage: `https://s3-us-west-1.amazonaws.com/hrr34-trailblazer/${i}-min.jpg`,
-      images: populateImages(i),
-    });
+  for (let i = 4; i > 0; i -= 1) {
+    if (index % i === 0) {
+      numOfImages = i - 1;
+      break;
+    }
   }
-  return products;
+  for (let i = 1; i <= numOfImages; i++) {
+    colors.push(capitalizeFirst(faker.commerce.color()));
+  }
+  return colors;
 };
 
-const data = createMockProducts();
+let idCount = 0;
 
-module.exports.createMockProducts = createMockProducts;
+const seedMe = () => {
+  // let id = idCount;
+  idCount++;
+
+  return {
+    id: idCount,
+    name: faker.commerce.productName(),
+    rating: Number(faker.finance.amount(1, 5, 1)),
+    review_count: faker.random.number({ min: 20, max: 150 }),
+    item_num: idCount,
+    price: faker.commerce.price(50, 500),
+    main_image: 'http://placekitten.com/700/500',
+    images: populateImages(idCount),
+    colors: populateColors(idCount),
+  };
+};
+
+const genCSV = async () => {
+  console.time('GenerateCSV');
+  const csvStream = csv.createWriteStream({ headers: false, objectMode: true });
+  const writableStream = fs.createWriteStream('data.csv');
+  writableStream.on('finish', () => {
+    console.log('Generated CSV file');
+  });
+  csvStream.pipe(writableStream);
+  for (let i = 0; i < 10000000; i++) {
+    csvStream.write(seedMe());
+  }
+  csvStream.end();
+  console.timeEnd('GenerateCSV');
+};
+
+genCSV();
+
+// const generator = async (mass, exp, itr) => {
+//   let iterator = 1;
+//   let idCount = 1;
+//   console.time('GeneratorFunc');
+
+//   while (iterator <= itr) {
+//     const again = async () => {
+//       for (let i = 0; i < exp; i++) {
+//         let products = JSON.stringify({
+//           id: idCount,
+//           name: faker.commerce.productName(),
+//           rating: Number(faker.finance.amount(1, 5, 1)),
+//           review_count: faker.random.number({ min: 20, max: 150 }),
+//           item_num: i,
+//           price: faker.commerce.price(50, 500),
+//           main_image: `http://placekitten.com/700/500`,
+//           images: populateImages(i),
+//         });
+//         if(idCount === 500000){
+//           await stream.write(`${products}`)
+//         } else {
+//           await stream.write(`${products}\n`);
+//           idCount += 1;
+//         }
+//       }
+//     };
+//     for (let x = 0; x < mass; x++) {
+//       await again();
+//     }
+//     iterator += 1;
+//   }
+//   console.timeEnd('GeneratorFunc');
+// };
+
+// generator(50, 100, 100);
