@@ -56,21 +56,21 @@ const seedMe = () => {
 
   return {
     id: idCount,
+    colors: populateColors(idCount),
+    images: populateImages(idCount),
+    item_num: idCount,
+    main_image: 'http://placekitten.com/700/500',
     name: faker.commerce.productName(),
+    price: faker.commerce.price(50, 500),
     rating: Number(faker.finance.amount(1, 5, 1)),
     review_count: faker.random.number({ min: 20, max: 150 }),
-    item_num: idCount,
-    price: faker.commerce.price(50, 500),
-    main_image: 'http://placekitten.com/700/500',
-    images: populateImages(idCount),
-    colors: populateColors(idCount),
   };
 };
 
 const genCSV = async () => {
   console.time('GenerateCSV');
-  const csvStream = csv.createWriteStream({ headers: false, objectMode: true });
-  const writableStream = fs.createWriteStream('data.csv');
+  const csvStream = csv.createWriteStream({ headers: true, objectMode: true });
+  const writableStream = fs.createWriteStream('data-cass.csv');
   writableStream.on('finish', () => {
     console.log('Generated CSV file');
   });

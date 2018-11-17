@@ -43,14 +43,6 @@ const executeQuery = (targetTable) => {
         if(err) return console.log(`Error in Truncate: ${err}`);
         let stream = client.query(copyFrom(`COPY ${table} FROM STDIN (FORMAT CSV)`));
         var fileStream = fs.createReadStream(dataFile);
-    //     let doc = '';
-    //     fileStream.on('data', (chunk) => doc += chunk)
-    //     fileStream.on('end', () => {
-    //       let recArray = doc.split('\n');
-    //       recArray = recArray.map(elem => {return JSON.parse(elem)});
-    //       console.log('recArray[0] -->', recArray[0]);
-    //     //   fileStream.pipe(stream);
-    //   })
         fileStream.on('error', (error) => {
             console.log(`Error in read stream: ${error}`);
         });
