@@ -9,24 +9,26 @@ class App extends React.Component {
 
     this.state = {
       product: null,
-      isLoading: false
+      isLoading: false,
     };
   }
 
   componentDidMount() {
     const url = window.location.href.split("/");
-    const id = url[url.length - 1];
-
+    const id = Math.floor(Math.random() * 10000);
+    console.log('id --->', id);
+    console.log('isLoading state -->', this.state.isLoading);
     axios
-      .get(`/data/${id}`)
-      .then(res => {
+      .get(`/data`) // <---- change this back to ${id}
+      .then((res) => {
         const data = res.data;
+        console.log('data --->', data);
         this.setState({
           product: data,
-          isLoading: true
+          isLoading: true,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Error at GET request", err);
       });
   }

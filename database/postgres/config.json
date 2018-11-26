@@ -1,0 +1,7 @@
+{
+  "db": "gs_details",
+  "port": "5432",
+  "user": "patrick",
+  "host": "localhost",
+  "pw": "password"
+}

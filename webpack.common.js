@@ -13,7 +13,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules|bower_components|data-cass)/,
         include: SRC_DIR,
         use: {
           loader: "babel-loader"

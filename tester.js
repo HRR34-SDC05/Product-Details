@@ -1,0 +1,1 @@
+console.log(JSON.parse(["{""image"":""http://placekitten.com/700/500"",""color"":""Grey""}"]));
