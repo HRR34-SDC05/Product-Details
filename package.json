@@ -61,6 +61,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "cassandra-driver": "^3.5.0",
     "csvdata": "^1.7.0",
     "express": "^4.16.4",
     "express-cassandra": "^2.2.3",
@@ -69,6 +70,7 @@
     "mongodb": "^3.1.8",
     "mongoose": "^5.3.6",
     "pg": "^7.5.0",
+    "pg-copy-streams": "1.2.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-star-ratings": "^2.3.0",

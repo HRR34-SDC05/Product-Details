@@ -69,8 +69,8 @@ const seedMe = () => {
 
 const genCSV = async () => {
   console.time('GenerateCSV');
-  const csvStream = csv.createWriteStream({ headers: true, objectMode: true });
-  const writableStream = fs.createWriteStream('data-cass.csv');
+  const csvStream = csv.createWriteStream({ headers: false, objectMode: true });
+  const writableStream = fs.createWriteStream('data-post.csv');
   writableStream.on('finish', () => {
     console.log('Generated CSV file');
   });

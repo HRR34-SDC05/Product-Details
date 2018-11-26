@@ -3,9 +3,9 @@ const faker = require('faker');
 const fs = require('fs');
 const path = require('path');
 const copyFrom = require('pg-copy-streams').from;
-const config = require('./config.json')
+const config = require('./config.json');
 
-const dataFile = path.join(__dirname, '../../data.csv');
+const dataFile = path.join(__dirname, '../../data-post.csv');
 const table = 'details';
 
 const host = config.host;
@@ -15,9 +15,10 @@ const db = config.db;
 const port = config.port;
 const conString = `postgres://${user}:${pw}@${host}:${port}/${db}`;
 const createQuery = `
-    CREATE TABLE details (id SERIAL, name VARCHAR(255), rating DECIMAL, review_count INT, item_num INT, price DECIMAL, main_image VARCHAR(255), images TEXT, colors TEXT, PRIMARY KEY (id));`;
+  CREATE TABLE details (id SERIAL, colorS TEXT, images TEXT, item_num INT, main_image VARCHAR(255), name VARCHAR(255), price DECIMAL, rating DECIMAL, review_count INT, PRIMARY KEY(id));`
+// const alphabetical = `CREATE TABLE details (id SERIAL, colorS TEXT, images TEXT, item_num INT, main_image VARCHAR(255), name VARCHAR(255), price DECIMAL, rating DECIMAL, review_count INT, PRIMARY KEY(id));`
 const insertText = `
-    INSERT INTO details (name, rating, review_count, item_num, price, main_image, images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+  INSERT INTO details (name, rating, review_count, item_num, price, main_image, images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
 
 const client = new Client({
   connectionString: conString,
@@ -26,39 +27,42 @@ const client = new Client({
 client.connect();
 
 const executeQuery = (targetTable) => {
-    client.query('DROP TABLE IF EXISTS details')
-    client.query(createQuery);
-    const execute = (target, callback) => {
-        client.query(`Truncate ${target}`, (err) => {
-            if (err) {
-                client.end();
-                callback(err);
-            } else {
-                console.log(`Truncated ${target}`);
-                callback(null, target);
-            }
-        });
-    };
-    execute(targetTable, (err) => {
-        if(err) return console.log(`Error in Truncate: ${err}`);
-        let stream = client.query(copyFrom(`COPY ${table} FROM STDIN (FORMAT CSV)`));
-        var fileStream = fs.createReadStream(dataFile);
-        fileStream.on('error', (error) => {
-            console.log(`Error in read stream: ${error}`);
-        });
-        stream.on('error', (error) => {
-            console.log(`Error in creating stream: ${error}`);
-        });
-        stream.on('end', () => {
-            console.log('Completed copy command.');
-            client.end();
-        });
-        fileStream.pipe(stream);
+  console.time('Seeding')
+  client.query('DROP TABLE IF EXISTS details');
+  client.query(createQuery);
+  const execute = (target, callback) => {
+    client.query(`Truncate ${target}`, (err) => {
+      if (err) {
+        client.end();
+        callback(err);
+      } else {
+        console.log(`Truncated ${target}`);
+        callback(null, target);
+      }
     });
+  };
+  execute(targetTable, (err) => {
+    if (err) return console.log(`Error in Truncate: ${err}`);
+    const stream = client.query(copyFrom(`COPY ${table} FROM STDIN (FORMAT CSV)`));
+    const fileStream = fs.createReadStream(dataFile);
+    fileStream.on('error', (error) => {
+      console.log(`Error in read stream: ${error}`);
+    });
+    stream.on('error', (error) => {
+      console.log(`Error in creating stream: ${error}`);
+    });
+    stream.on('end', () => {
+      console.log('Completed copy command.');
+      client.end();
+    });
+    fileStream.pipe(stream);
+  });
+  console.timeEnd('Seeding');
 };
 
 executeQuery(table);
 
+module.exports = client;
 
 // const createQuery = `
 //     CREATE TABLE details (id SERIAL, name VARCHAR(255), rating DECIMAL, review_count INT, item_num INT, price DECIMAL, main_image VARCHAR(255), images JSONB, PRIMARY KEY (id));`;
@@ -107,14 +111,13 @@ executeQuery(table);
 //       const src = fs.createReadStream(path.join(__dirname,'../data.txt'))
 //       let doc = '';
 //       src.on('data', (chunk) => {doc += chunk});
-    //   src.on('end', () => {
-    //       let recArray = doc.split('\n');
-    //       recArray = recArray.map(elem => {return JSON.parse(elem)});
-    //       resolve(recArray);
-    //   })
+//   src.on('end', () => {
+//       let recArray = doc.split('\n');
+//       recArray = recArray.map(elem => {return JSON.parse(elem)});
+//       resolve(recArray);
+//   })
 //     })
 // }
-
 
 
 // const readFromTxt = function (fileId) {
@@ -137,5 +140,5 @@ executeQuery(table);
 //     })
 //     // console.timeEnd('ReadFiles')
 //   })
-   
+
 // }

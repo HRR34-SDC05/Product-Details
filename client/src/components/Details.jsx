@@ -11,8 +11,8 @@ class Details extends React.Component {
     super(props);
 
     this.state = {
-      color: this.props.product.images[0].color,
-      mainImage: this.props.product.mainImage
+      color: this.props.product.colors[0],
+      mainImage: this.props.product.main_image
     };
     this.changeColor = this.changeColor.bind(this);
     this.changeImage = this.changeImage.bind(this);
@@ -21,9 +21,9 @@ class Details extends React.Component {
   changeColor(img) {
     const images = this.props.product.images;
     for (let i = 0; i < images.length; i++) {
-      if (images[i].image === img.src) {
+      if (images[i] === img.src) {
         this.setState({
-          color: images[i].color
+          color: colors[i]
         });
       }
     }
@@ -37,12 +37,13 @@ class Details extends React.Component {
   }
 
   render() {
+    console.log(this.state.mainImage)
     const { product } = this.props;
     return (
       <div style={styles.container}>
         <div style={styles.wrapper}>
           <div style={styles.mainImageWrapper}>
-            <img style={styles.mainImage} src={this.state.mainImage} alt="" />
+            <img style={styles.mainImage} src={this.state.main_image} alt="" />
           </div>
           <div style={styles.Details}>
             <div style={styles.brand}>Trailblazer</div>

@@ -1,3 +1,6 @@
 *.log
 bower_components
 node_modules
+data.csv
+data-cass.csv
+data-post.csv
