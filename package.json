@@ -7,7 +7,7 @@
     "node": ">= 4"
   },
   "scripts": {
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
     "build-dev": "webpack --config webpack.dev.js --watch --open",
     "build-prod": "webpack --config webpack.prod.js --open",
     "db:setup": "node database/seed.js",
