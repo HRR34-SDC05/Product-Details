@@ -1,7 +1,10 @@
+require('newrelic');
+
 import React from "react";
 import axios from "axios";
 import Details from "./Details.jsx";
 import styles from "../style.css.js";
+
 
 class App extends React.Component {
   constructor(props) {

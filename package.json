@@ -69,6 +69,7 @@
     "fast-csv": "^2.4.1",
     "mongodb": "^3.1.8",
     "mongoose": "^5.3.6",
+    "newrelic": "^4.11.0",
     "pg": "^7.5.0",
     "pg-copy-streams": "1.2.0",
     "react": "^16.6.0",
