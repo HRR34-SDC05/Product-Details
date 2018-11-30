@@ -7,7 +7,7 @@ const Images = props => (
       <span className="details-image">
         <img
           style={styles.images}
-          src={image.image}
+          src={image}
           alt=""
           onMouseOver={e => {
             props.handleChange(e.target);

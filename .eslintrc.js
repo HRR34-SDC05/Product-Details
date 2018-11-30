@@ -1,7 +1,7 @@
 
 module.exports = {
-  "extends": ["airbnb", "prettier", "prettier/react"],
-  "plugins": ["react", "prettier"],
+  "extends": ["airbnb"],
+  "plugins": ["react"],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -14,7 +14,6 @@ module.exports = {
   },
   "rules": {
     "max-len": ["warn", 80],
-    "prettier/prettier": "error",
     "no-console": "off",
     "prefer-destructuring": "off",
     "import/extensions": [".js", ".jsx"],

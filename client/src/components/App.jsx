@@ -3,33 +3,37 @@ import axios from "axios";
 import Details from "./Details.jsx";
 import styles from "../style.css.js";
 
+var port = 3030;
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       product: null,
-      isLoading: false
+      isLoading: false,
     };
   }
 
   componentDidMount() {
-    const url = window.location.href.split("/");
+    const url = window.location.href.split('/');
     const id = url[url.length - 1];
-
-    axios
-      .get(
-        `http://fectrailblazer-env.ckr33svztx.us-east-1.elasticbeanstalk.com/data/${id}`
-      )
-      .then(res => {
+    console.log('id --->', id);
+    console.log('isLoading state -->', this.state.isLoading);
+    const instance = axios.create({ baseURL: `ec2-13-59-44-94.us-east-2.compute.amazonaws.com:${port}` });
+    instance
+      .get(`/product/data/${id}`) // <---- change this back to ${id}
+      .then((res) => {
         const data = res.data;
+        console.log('res.data in did mount --->', data);
         this.setState({
           product: data,
-          isLoading: true
+          isLoading: true,
         });
       })
-      .catch(err => {
-        console.log("Error at GET request", err);
+      .catch((err) => {
+        console.log('Error at GET request', err);
       });
   }
 
