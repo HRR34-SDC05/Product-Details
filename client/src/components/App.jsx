@@ -1,9 +1,9 @@
-require('newrelic');
-
 import React from "react";
 import axios from "axios";
 import Details from "./Details.jsx";
 import styles from "../style.css.js";
+
+var port = 3030;
 
 
 class App extends React.Component {
@@ -17,22 +17,23 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const url = window.location.href.split("/");
-    const id = Math.floor(Math.random() * 10000);
+    const url = window.location.href.split('/');
+    const id = url[url.length - 1];
     console.log('id --->', id);
     console.log('isLoading state -->', this.state.isLoading);
-    axios
-      .get(`/data`) // <---- change this back to ${id}
+    const instance = axios.create({ baseURL: `ec2-18-223-237-77.us-east-2.compute.amazonaws.com:${port}` });
+    instance
+      .get(`/product/data/${id}`) // <---- change this back to ${id}
       .then((res) => {
         const data = res.data;
-        console.log('data --->', data);
+        console.log('res.data in did mount --->', data);
         this.setState({
           product: data,
           isLoading: true,
         });
       })
       .catch((err) => {
-        console.log("Error at GET request", err);
+        console.log('Error at GET request', err);
       });
   }
 
