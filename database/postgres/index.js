@@ -5,17 +5,19 @@ const path = require('path');
 const copyFrom = require('pg-copy-streams').from;
 const config = require('./config.json');
 
-const dataFile = path.join(__dirname, '../../data-post.csv');
+const dataFile = path.join(__dirname, '../../data/data-post.csv');
 const table = 'details';
 
-const host = config.host;
-const user = config.user;
-const pw = config.pw;
-const db = config.db;
-const port = config.port;
+const environment = 'production';
+
+const host = config[environment].host;
+const user = config[environment].user;
+const pw = config[environment].pw;
+const db = config[environment].db;
+const port = config[environment].port;
 const conString = `postgres://${user}:${pw}@${host}:${port}/${db}`;
 const createQuery = `
-  CREATE TABLE details (id SERIAL, colorS TEXT, images TEXT, item_num INT, main_image VARCHAR(255), name VARCHAR(255), price DECIMAL, rating DECIMAL, review_count INT, PRIMARY KEY(id));`
+  CREATE TABLE details (id SERIAL, colors TEXT, images TEXT, item_num INT, main_image VARCHAR(255), name VARCHAR(255), price DECIMAL, rating DECIMAL, review_count INT, PRIMARY KEY(id));`
 // const alphabetical = `CREATE TABLE details (id SERIAL, colorS TEXT, images TEXT, item_num INT, main_image VARCHAR(255), name VARCHAR(255), price DECIMAL, rating DECIMAL, review_count INT, PRIMARY KEY(id));`
 const insertText = `
   INSERT INTO details (name, rating, review_count, item_num, price, main_image, images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
