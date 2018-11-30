@@ -21,7 +21,7 @@ class App extends React.Component {
     const id = url[url.length - 1];
     console.log('id --->', id);
     console.log('isLoading state -->', this.state.isLoading);
-    const instance = axios.create({ baseURL: `ec2-18-223-237-77.us-east-2.compute.amazonaws.com:${port}` });
+    const instance = axios.create({ baseURL: `ec2-13-59-44-94.us-east-2.compute.amazonaws.com:${port}` });
     instance
       .get(`/product/data/${id}`) // <---- change this back to ${id}
       .then((res) => {
