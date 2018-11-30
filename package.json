@@ -14,7 +14,7 @@
     "test": "jest --watch --verbose",
     "stage": "lint-staged",
     "pg:init": " psql -d 'gs_details' -c 'CREATE TABLE details (id serial, name varchar(255), rating int, reviewCount int, itemNum int, price int, mainImage varchar(255), images varchar(255)[], PRIMARY KEY(id));' -U patrick",
-    "pg:seed": "node ./database/postgres/index.js"
+    "pg:seed": "node --max-old-space-size=8192 ./database/postgres/index.js"
   },
   "repository": {
     "type": "git",
